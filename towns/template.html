@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<br lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Poblacio</th>
+            <th>Residential No Name(m)</th>
+            <th>Num Residential No Name</th>
+            <th>Living Street No Name(m)</th>
+            <th>Num Living Street No Name</th>
+            <th>Total No Name(m)</th>
+        </tr>
+        {% for line in data %}
+            <tr>
+                <td>{{line.name}}</td>
+                <td>{{line.len_residential_noname[0]}}</td>
+                <td>{{line.len_residential_noname[1]}}</td>
+                <td>{{line.len_livingstreet_noname[0]}}</td>
+                <td>{{line.len_livingstreet_noname[1]}}</td>
+                <td>{{line.len_residential_noname[0] + line.len_livingstreet_noname[0]}}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+</body>
+</html>
