@@ -5,11 +5,13 @@ from configobj import ConfigObj
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA
 from jinja2 import Template
 import os
+import sys
 
 print '\n'
 
-
-config = ConfigObj('report.conf')
+url_config = sys.argv[1]
+config = ConfigObj(url_config)
+base_dir = os.path.join(os.getcwd(), os.path.dirname(url_config))
 
 conn = psycopg2.connect(**config['report']['connection'])
 cur = conn.cursor()
@@ -39,13 +41,15 @@ if not isinstance(config['report']['templates'], list):
 else:
     templates = config['report']['templates']
 for template in templates:
-    f = open(template)
-    base, extension = os.path.splitext(template)
+    url_template = os.path.join(base_dir, template)
+    f = open(url_template)
+    base, extension = os.path.splitext(url_template)
     temp = f.read()
     f.close()
     t = Template(temp)
 
     report_data = t.render(data=result)
+    url_out = os.path.join(base_dir, 'report'+str(extension))
     f = open('report'+str(extension), 'w')
     f.write(report_data)
     f.close()
