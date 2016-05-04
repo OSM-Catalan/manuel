@@ -3,25 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <style>
+        progress[value]::-webkit-progress-bar {
+        background-color: #f00;
+        border-radius: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+    }</style>
 </head>
 <body>
+
     <table border="1">
         <tr>
+            <th>Id</th>
             <th>Poblacio</th>
             <th>Residential No Name(m)</th>
             <th>Num Residential No Name</th>
             <th>Living Street No Name(m)</th>
             <th>Num Living Street No Name</th>
             <th>Total No Name(m)</th>
+            <th>Total(Residential + Living street)</th>
+            <th>Percentatge Restant</th>
+            <th>Resta</th>
         </tr>
         {% for line in data %}
             <tr>
+                <td>{{line.id}}</td>
                 <td>{{line.name}}</td>
                 <td>{{line.len_residential_noname[0]}}</td>
                 <td>{{line.len_residential_noname[1]}}</td>
                 <td>{{line.len_livingstreet_noname[0]}}</td>
                 <td>{{line.len_livingstreet_noname[1]}}</td>
                 <td>{{line.len_residential_noname[0] + line.len_livingstreet_noname[0]}}</td>
+                <td>{{(line.len_residential_total[0] + line.len_livingstreet_total[0])}}</td>
+                {% if (line.len_residential_total[0] + line.len_livingstreet_total[0])>0 %}
+                <td>{{((line.len_residential_noname[0] + line.len_livingstreet_noname[0])/(line.len_residential_total[0] + line.len_livingstreet_total[0]))*100}}%</td>
+                {% else %}
+                <td>0%</td>
+                {% endif %}
+
+                {% if (line.len_residential_total[0] + line.len_livingstreet_total[0])>0 %}
+                <td><progress value="{{((line.len_residential_noname[0] + line.len_livingstreet_noname[0])/(line.len_residential_total[0] + line.len_livingstreet_total[0]))*100}}" max="100"></progress></td>
+                {% else %}
+                <td><progress value="0" max="100"></progress></td>
+                {% endif %}
+
             </tr>
         {% endfor %}
 
