@@ -7,7 +7,7 @@ from jinja2 import Template
 import os
 import sys
 
-print '\n'
+print('\n')
 
 url_config = sys.argv[1]
 config = ConfigObj(url_config)
@@ -53,4 +53,4 @@ for template in templates:
     f = open('report'+str(extension), 'w')
     f.write(report_data)
     f.close()
-print '\nDone\n'
+print ('\nDone\n')
