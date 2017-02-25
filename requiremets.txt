@@ -1,0 +1,4 @@
+psycopg2
+configobj
+progressbar
+jinja2
