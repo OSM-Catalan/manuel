@@ -15,6 +15,6 @@ setup(
     install_requires=requirements,
     entry_points='''
         [console_scripts]
-        manuel=manuel.cli:generate_report
+        manuel=manuel.cli:cli_generate_report
     ''',
 )
