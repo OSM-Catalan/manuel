@@ -7,6 +7,21 @@ from jinja2 import Template
 import os
 
 
+def create_index(url_config):
+    """
+    Creates the index for the queries
+
+    :param url_config: Config file
+    :return: None
+        """
+
+    config = ConfigObj(url_config)
+    conn = psycopg2.connect(**config['report']['connection'])
+    cur = conn.cursor()
+    cur.execute(config['report']['general']['indexs'])
+    conn.commit()
+
+
 def generate_report(url_config):
     print('\n')
 
