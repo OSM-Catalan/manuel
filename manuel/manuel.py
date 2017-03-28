@@ -6,7 +6,7 @@ from configobj import ConfigObj
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA
 from jinja2 import Template
 import os
-
+import sys
 
 def create_index(url_config):
     """
@@ -70,3 +70,7 @@ def generate_report(url_config):
         f.write(report_data)
         f.close()
     print ('\nDone\n')
+
+
+if __name__ == "__main__":
+    generate_report(sys.argv[1])
