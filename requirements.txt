@@ -1,5 +1,5 @@
 psycopg2
 configobj
-progressbar
 jinja2
 click
+tqdm
