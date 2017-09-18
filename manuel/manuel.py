@@ -3,7 +3,8 @@
 from __future__ import absolute_import
 import psycopg2
 from configobj import ConfigObj
-from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA
+
+from tqdm import tqdm
 from jinja2 import Template
 import os
 import sys
@@ -35,11 +36,8 @@ def generate_report(url_config):
     data = cur.fetchall()
 
     result = []
-    widgets = [Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA()]
 
-    pbar = ProgressBar(widgets=widgets, maxval=len(data)).start()
-    for index, poblacio in enumerate(data):
-        pbar.update(index+1)
+    for index, poblacio in tqdm(enumerate(data), total=len(data)):
         element_vars = {}
         for element in config['report']['elements'].keys():
             sql = config['report']['elements'][element]['sql']
