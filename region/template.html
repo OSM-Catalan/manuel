@@ -27,7 +27,7 @@
                 <td>{{line.len_livingstreet_noname[0]}}</td>
                 <td>{{line.len_livingstreet_noname[1]}}</td>
                 <td>{{line.len_residential_noname[0] + line.len_livingstreet_noname[0]}}</td>
-                <td>{{line.len_residential_noname[0] + line.len_livingstreet_noname[0]}}</td>
+                <td>{{line.len_residential_total[0] + line.len_livingstreet_total[0]}}</td>
                 {% if (line.len_residential_total[0] + line.len_livingstreet_total[0])>0 %}
                 <td>{{((line.len_residential_noname[0] + line.len_livingstreet_noname[0])/(line.len_residential_total[0] + line.len_livingstreet_total[0]))*100}}%</td>
                 {% else %}
