@@ -9,22 +9,37 @@ from jinja2 import Template
 import os
 import sys
 
-def create_index(url_config):
+
+def create_index(url_config, debug=False):
     """
     Creates the index for the queries
 
     :param url_config: Config file
+    :param debug: Enables debug mode
+    :type debug: bool
     :return: None
         """
 
     config = ConfigObj(url_config)
     conn = psycopg2.connect(**config['report']['connection'])
     cur = conn.cursor()
+    if debug:
+        ex_sql = cur.mogrify(config['report']['general']['indexs'])
+        print(ex_sql)
     cur.execute(config['report']['general']['indexs'])
     conn.commit()
 
 
-def generate_report(url_config):
+def generate_report(url_config, debug=False):
+    """
+    Method to generate the report
+
+    :param url_config: URL to the config file
+    :param debug: Enables debug mode
+    :type debug: bool
+    :return: None
+    """
+
     print('\n')
 
     config = ConfigObj(url_config)
@@ -32,6 +47,9 @@ def generate_report(url_config):
 
     conn = psycopg2.connect(**config['report']['connection'])
     cur = conn.cursor()
+    if debug:
+        ex_sql = cur.mogrify(config['report']['general']['subarea_sql'], config['report']['general'])
+        print(ex_sql)
     cur.execute(config['report']['general']['subarea_sql'], config['report']['general'])
     data = cur.fetchall()
 
@@ -41,6 +59,9 @@ def generate_report(url_config):
         element_vars = {}
         for element in config['report']['elements'].keys():
             sql = config['report']['elements'][element]['sql']
+            if debug:
+                ex_sql = cur.mogrify(sql, (str(poblacio[0]),))
+                print(ex_sql)
             cur.execute(sql, (str(poblacio[0]),))
             element_vars[element] = cur.fetchall()[0]
 
