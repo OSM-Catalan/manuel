@@ -1,2 +1,2 @@
-{% for line in data %}{{line.name}},{{line.len_residential_noname[0]}},{{line.len_residential_noname[1]}},{{line.len_livingstreet_noname[0]}},{{line.len_livingstreet_noname[1]}},{{line.len_residential_noname[0] + line.len_livingstreet_noname[0]}},
+{% for line in data %}{{line.name}};{{line.len_residential_noname[0]}};{{line.len_residential_noname[1]}};{{line.len_livingstreet_noname[0]}};{{line.len_livingstreet_noname[1]}};{{line.len_residential_noname[0] + line.len_livingstreet_noname[0]}};{{line.len_residential_total[0] + line.len_livingstreet_total[0]}},
 {% endfor %}
