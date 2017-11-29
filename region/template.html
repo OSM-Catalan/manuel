@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<br lang="en">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title></title>
     <style>
         progress[value]::-webkit-progress-bar {
@@ -15,33 +15,33 @@
 </head>
 <body>
     <table border="1">
-        <tr>
-            <th>Id</th>
-            <th>Poblacio</th>
-            <th>Residential No Name(m)</th>
-            <th>Num Residential No Name</th>
-            <th>Living Street No Name(m)</th>
-            <th>Num Living Street No Name</th>
-            <th>Total No Name(m)</th>
-            <th>Total(Residential+Living street)</th>
-            <th>Percentatge Restant</th>
-            <th>Resta</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Poblacio</th>
+                <th>Residential No Name(m)</th>
+                <th>Num Residential No Name</th>
+                <th>Living Street No Name(m)</th>
+                <th>Num Living Street No Name</th>
+                <th>Total No Name(m)</th>
+                <th>Total (Residential + Living street)</th>
+                <th>Percentatge Restant</th>
+                <th>Resta</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for line in data %}
             <tr>
                 <td>{{line.id}}</td>
                 <td>{{line.name}}</td>
-                <td>{{line.len_residential_noname[0]}}</td>
-                <td>{{line.len_residential_noname[1]}}</td>
-                <td>{{line.len_livingstreet_noname[0]}}</td>
-                <td>{{line.len_livingstreet_noname[1]}}</td>
-                <td>{{line.len_residential_noname[0] + line.len_livingstreet_noname[0]}}</td>
-                <td>{{line.len_residential_total[0] + line.len_livingstreet_total[0]}}</td>
-                {% if (line.len_residential_total[0] + line.len_livingstreet_total[0])>0 %}
-                <td>{{((line.len_residential_noname[0] + line.len_livingstreet_noname[0])/(line.len_residential_total[0] + line.len_livingstreet_total[0]))*100}}%</td>
-                {% else %}
-                <td>0%</td>
-                {% endif %}
+                <td>{{'%.0f' | format(line.len_residential_noname[0])}}</td>
+                <td>{{'%.0f' | format(line.len_residential_noname[1])}}</td>
+                <td>{{'%.0f' | format(line.len_livingstreet_noname[0])}}</td>
+                <td>{{'%.0f' | format(line.len_livingstreet_noname[1])}}</td>
+                <td>{{'%.0f' | format(line.len_residential_noname[0] + line.len_livingstreet_noname[0])}}</td>
+                <td>{{'%.0f' | format(line.len_residential_total[0] + line.len_livingstreet_total[0])}}</td>
+                <td>{{'%.1f%%' | format(line.len_residential_total[0] + line.len_livingstreet_total[0] and ((line.len_residential_noname[0] + line.len_livingstreet_noname[0])/(line.len_residential_total[0] + line.len_livingstreet_total[0]))*100)}}</td>
+
                 {% if (line.len_residential_total[0] + line.len_livingstreet_total[0])>0 %}
                 <td><progress value="{{((line.len_residential_noname[0] + line.len_livingstreet_noname[0])/(line.len_residential_total[0] + line.len_livingstreet_total[0]))*100}}" max="100"></progress></td>
                 {% else %}
@@ -49,7 +49,7 @@
                 {% endif %}
             </tr>
         {% endfor %}
-
+        </tbody>
     </table>
 </body>
 </html>
