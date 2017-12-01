@@ -84,7 +84,7 @@ def generate_report(url_config, debug=False):
         t = Template(temp)
 
         report_data = t.render(data=result)
-        url_out = os.path.join(base_dir, os.path.dirname(url_config), 'report'+str(extension))
+        url_out = os.path.join(base_dir, 'report'+str(extension))
         f = open(url_out, 'w')
         f.write(report_data)
         f.close()
