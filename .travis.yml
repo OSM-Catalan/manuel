@@ -1,7 +1,13 @@
 language: python
+sudo: required
+dist: trusty
 python:
-  - "2.7"
+  - 2.7
+  - 3.4
+install:
+ - pip install .
+ - pip install -r requirements-dev.txt
 script:
-  - pip install .
-  - pip install -r requirements-dev.txt
-  - python -m unittest discover
+ - pwd
+ - ls
+ - PYTHONPATH="." python -m unittest discover
