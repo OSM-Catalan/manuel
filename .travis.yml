@@ -3,5 +3,5 @@ python:
   - "2.7"
 script:
   - pip install .
-  - pip install -r requirements-dev
+  - pip install -r requirements-dev.txt
   - python -m unittest discover
