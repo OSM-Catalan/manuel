@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 import click
-from manuel.manuel import generate_report
-from manuel.manuel import create_index
+from manuel.manuel import generate_report, create_index, generate_materialized_vies
 
 
 @click.group()
