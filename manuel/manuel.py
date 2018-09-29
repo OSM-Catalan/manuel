@@ -84,29 +84,22 @@ def generate_report(url_config, debug=False):
     base_dir = os.path.join(os.getcwd(), os.path.dirname(url_config))
 
     conn = psycopg2.connect(**config['report']['connection'])
-    cur = conn.cursor()
-    if debug:
-        ex_sql = cur.mogrify(config['report']['general']['subarea_sql'], config['report']['general'])
-        print(ex_sql)
-    cur.execute(config['report']['general']['subarea_sql'], config['report']['general'])
-    data = cur.fetchall()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    result = {}
 
-    result = []
-
-    for index, poblacio in tqdm(enumerate(data), total=len(data)):
-        element_vars = {}
-        for element in config['report']['elements'].keys():
-            sql = config['report']['elements'][element]['sql']
-            if debug:
-                ex_sql = cur.mogrify(sql, (str(poblacio[0]),))
-                print(ex_sql)
-            cur.execute(sql, (str(poblacio[0]),))
-            element_vars[element] = cur.fetchall()[0]
-
-        element_vars['id'] = int(abs(poblacio[0]))
-        element_vars['name'] = poblacio[1]
-        result.append(element_vars)
-
+    for element in tqdm(config['report']['elements'].keys()):
+        sql = config['report']['elements'][element]['sql']
+        if debug:
+            ex_sql = cur.mogrify(sql)
+            print(ex_sql)
+        cur.execute(sql)
+        element_vars = cur.fetchall()
+        for e in element_vars:
+            dict_element = dict(e)
+            name = dict_element["subarea_name"]
+            if name not in result:
+                result[name] = {}
+            result[name].update(dict_element)
     conn.close()
 
     if not isinstance(config['report']['templates'], list):
