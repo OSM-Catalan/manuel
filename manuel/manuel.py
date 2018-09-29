@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import
 import psycopg2
+from psycopg2.extensions import AsIs
+from psycopg2.extras import DictCursor
 from configobj import ConfigObj
 
 from tqdm import tqdm
@@ -27,6 +29,42 @@ def create_index(url_config, debug=False):
         ex_sql = cur.mogrify(config['report']['general']['indexs'])
         print(ex_sql)
     cur.execute(config['report']['general']['indexs'])
+    conn.commit()
+
+
+def generate_materialized_vies(url_config, debug=False):
+    """
+    Generates the materialized vies
+
+    :param url_config: URL of the configuration file
+    :param debug: Debug mode:
+    :type debug: bool
+    :return: None
+    :rtype: None
+    """
+
+    sql_create = """
+    CREATE MATERIALIZED VIEW %(table_name)s as (%(subarea_sql)s);
+    """
+    sql_drop = """
+    DROP MATERIALIZED VIEW IF EXISTS %(table_name)s;
+    """
+    config = ConfigObj(url_config)
+
+    conn = psycopg2.connect(**config['report']['connection'])
+    cur = conn.cursor()
+    config["report"]["general"]["subarea_sql"] = AsIs(config["report"]["general"]["subarea_sql"])
+    config["report"]["general"]["table_name"] = AsIs("manuel_" + config["report"]["general"]["table_name"])
+
+    if debug:
+        drop_sql = cur.mogrify(sql_drop, config['report']['general'])
+        print(drop_sql)
+
+    cur.execute(sql_drop, config['report']['general'])
+    if debug:
+        mat_sql = cur.mogrify(sql_create, config['report']['general'])
+        print(mat_sql)
+    cur.execute(sql_create, config['report']['general'])
     conn.commit()
 
 
