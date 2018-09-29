@@ -12,6 +12,15 @@
         tr:nth-child(even) {background: #CCC}
 	    tr:nth-child(odd) {background: #FFF}
     </style>
+    <script type="text/javascript" src="http://tablesorter.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="http://tablesorter.com/__jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" id="js">$(document).ready(function() {
+        // call the tablesorter plugin
+        $("table").tablesorter({
+            // sort on the first column and third column, order asc
+            sortList: [[0,0],[2,0]]
+        });
+    }); </script>
 </head>
 <body>
     <table border="1">
@@ -32,20 +41,20 @@
         {% for poble,line in data.items() %}
             <tr>
                 <td>{{poble}}</td>
-                <td>{{'%.0f' | format(line.len_noname_residential or 0 )}}</td>
-                <td>{{'%.0f' | format(line.count_noname_residential or 0 )}}</td>
-                <td>{{'%.0f' | format(line.len_noname_livingstreet or 0 )}}</td>
-                <td>{{'%.0f' | format(line.count_noname_livingstreet or 0 )}}</td>
-                <td>{{'%.0f' | format((line.len_noname_residential or 0) + (line.len_noname_livingstreet or 0 ))}}</td>
-                <td>{{'%.0f' | format(line.len_residential or 0 + line.len_livingstreet or 0)}}</td>
-                {% if (line.len_residential or 0+ line.len_livingstreet or 0 ) > 0 %}
-                    <td>{{'%.1f%%' | format(((line.len_noname_residential or 0 + (line.len_noname_livingstreet or 0))/(line.len_residential or 0 + (line.len_livingstreet or 0) ))*100)}}</td>
+                <td>{{'%.0f' | format(line.len_noname_residential)}}</td>
+                <td>{{'%.0f' | format(line.count_noname_residential)}}</td>
+                <td>{{'%.0f' | format(line.len_noname_livingstreet)}}</td>
+                <td>{{'%.0f' | format(line.count_noname_livingstreet)}}</td>
+                <td>{{'%.0f' | format((line.len_noname_residential) + (line.len_noname_livingstreet ))}}</td>
+                <td>{{'%.0f' | format(line.len_residential_total + line.len_livingstreet_total)}}</td>
+                {% if (line.len_residential_total + line.len_livingstreet_total ) > 0 %}
+                    <td>{{'%.1f%%' | format( (100/(line.len_residential_total + line.len_livingstreet_total))* (line.len_noname_livingstreet+line.len_noname_residential) )}}</td>
                 {%else%}
-                    <td>0</td>
+                    <td>0%</td>
                 {% endif %}
 
-                {% if (line.len_residential or 0+ line.len_livingstreet or 0 ) > 0 %}
-                <td><progress value="{{((line.len_noname_residential or 0 + (line.len_noname_livingstreet or 0))/(line.len_residential or 0 + (line.len_livingstreet or 0) ))*100}}" max="100"></progress></td>
+                {% if (line.len_residential_total+  line.len_livingstreet_total) > 0 %}
+                <td><progress value="{{((line.len_noname_residential + (line.len_noname_livingstreet))/(line.len_residential_total + (line.len_livingstreet_total ) ))*100}}" max="100"></progress></td>
                 {% else %}
                 <td><progress value="0" max="100"></progress></td>
                 {% endif %}
