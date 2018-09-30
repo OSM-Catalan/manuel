@@ -107,6 +107,8 @@ def generate_report(url_config, debug=False):
     else:
         templates = config['report']['templates']
     for template in templates:
+        if debug:
+            print("Generating {}".format(template))
         url_template = os.path.join(base_dir, template)
         f = open(url_template)
         base, extension = os.path.splitext(url_template)
