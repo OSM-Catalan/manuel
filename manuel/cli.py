@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import click
-from manuel.manuel import generate_report, create_index, generate_materialized_vies
+from manuel.manuel import Manuel
 
 
 @click.group()
@@ -25,14 +25,12 @@ def cli_generate_report(config_file, index, recreate, debug):
     :type debug: bool
     :return:
     """
+    m = Manuel(config_file)
     if index:
-        create_index(config_file, debug)
+        m.create_index(config_file, debug)
     if recreate:
-        generate_materialized_vies(config_file, debug)
-    generate_report(config_file, debug)
-
-
-
+        m.generate_materialized_vies(config_file, debug)
+    m.generate_report(config_file, debug)
 
 
 def invoke():
