@@ -1,5 +1,6 @@
-psycopg2
+psycopg2-binary
 configobj
 jinja2
 click
 tqdm
+pony

@@ -9,16 +9,15 @@
 !Total (Residential + Living street)
 !Porcentatge Restant
 !Resta
-|-{% for line in data %}
-| {{line.id}}
-| {{line.name}}
-| align="right" | {{'%.0f' | format(line.len_residential_noname[0])}}
-| align="right" | {{'%.0f' | format(line.len_residential_noname[1])}}
-| align="right" | {{'%.0f' | format(line.len_livingstreet_noname[0])}}
-| align="right" | {{'%.0f' | format(line.len_livingstreet_noname[1])}}
-| align="right" | {{'%.0f' | format(line.len_residential_noname[0] + line.len_livingstreet_noname[0])}}
-| align="right" | {{'%.0f' | format(line.len_residential_total[0] + line.len_livingstreet_total[0])}}
-| align="right" | {{'%.1f%%' | format(line.len_residential_total[0] + line.len_livingstreet_total[0] and ((line.len_residential_noname[0] + line.len_livingstreet_noname[0])/(line.len_residential_total[0] + line.len_livingstreet_total[0]))*100)}}
+|-{% for poble,line in data.items() %}
+| {{poble}}
+| align="right" | {{'%.0f' | format(line.len_noname_residential)}}
+| align="right" | {{'%.0f' | format(line.count_noname_residential)}}
+| align="right" | {{'%.0f' | format(line.len_noname_livingstreet)}}
+| align="right" | {{'%.0f' | format(line.count_noname_livingstreet)}}
+| align="right" | {{'%.0f' | format(line.len_noname_residential + line.len_noname_livingstreet)}}
+| align="right" | {{'%.0f' | format(line.len_residential_total + line.len_livingstreet_total)}}
+| align="right" | {{'%.1f%%' | format(line.len_residential_total + line.len_livingstreet_total and ((line.len_noname_residential + line.len_noname_livingstreet)/(line.len_residential_total + line.len_livingstreet_total))*100)}}
 |-{% endfor %}
 |}
 
