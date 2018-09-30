@@ -9,7 +9,8 @@ from configobj import ConfigObj
 from tqdm import tqdm
 from jinja2 import Template
 import os
-import sys
+from manuel.models import *
+from datetime import datetime
 
 
 class Manuel(object):
@@ -21,6 +22,36 @@ class Manuel(object):
 
         self.config = ConfigObj(url_config)
         self.conn = psycopg2.connect(**self.config['report']['connection'])
+        maped = self.check_maping()
+        self.db = db
+        if self.db.provider is None:
+            conn_config = self.config["report"]["connection"]
+            self.db.bind(
+                provider="postgres",
+                host=conn_config["host"],
+                database=conn_config["database"],
+                user=conn_config["user"],
+                password=conn_config["password"]
+            )
+        if not maped:
+            db.generate_mapping(create_tables=True)
+
+    def check_maping(self):
+        """
+        Checks if the mapping is done
+        :return: True if the maping is done
+        :rtype: bool
+        """
+        cur = self.conn.cursor()
+        try:
+            sql = """
+            SELECT * FROM historic;
+            """
+            cur.execute(sql)
+            return True
+        except Exception:
+            self.conn.rollback()
+            return False
 
     def create_index(self, url_config, debug=False):
         """
@@ -83,7 +114,7 @@ class Manuel(object):
         """
 
         print('\n')
-
+        result = {}
         base_dir = os.path.join(os.getcwd(), os.path.dirname(url_config))
 
         cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -125,3 +156,22 @@ class Manuel(object):
             f.close()
 
         print ('\nDone\n')
+        return result
+
+    @db_session
+    def save_results(self, result):
+        """
+        Saves the results on the historic
+
+        :param result:
+        :return:
+        """
+
+        gen_date = str(datetime.now().date())
+        for subarea_name, data in result.items():
+            Historic(
+                generation_date=gen_date,
+                subarea_name=subarea_name,
+                data=data
+            )
+        commit()
