@@ -3,3 +3,4 @@ configobj
 jinja2
 click
 tqdm
+pony
