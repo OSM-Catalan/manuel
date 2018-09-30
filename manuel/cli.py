@@ -31,7 +31,7 @@ def cli_generate_report(config_file, index, recreate, debug):
     if recreate:
         m.generate_materialized_vies(config_file, debug)
     result = m.generate_report(config_file, debug)
-    m.save_results(result)
+    m.save_results(result, config_file)
 
 
 def invoke():

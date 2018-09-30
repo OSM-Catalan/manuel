@@ -159,19 +159,20 @@ class Manuel(object):
         return result
 
     @db_session
-    def save_results(self, result):
+    def save_results(self, result, config_url):
         """
         Saves the results on the historic
 
         :param result:
         :return:
         """
-
+        report_name = self.config["general"].get("report_name", config_url)
         gen_date = str(datetime.now().date())
         for subarea_name, data in result.items():
             Historic(
                 generation_date=gen_date,
                 subarea_name=subarea_name,
-                data=data
+                data=data,
+                report_name=report_name
             )
         commit()
