@@ -11,7 +11,7 @@ def manuel():
 @manuel.command()
 @click.argument('config_file')
 @click.option('--index/--no-index', default=False)
-@click.option('--recreate/--no-recreate', default=False)
+@click.option('--recreate/--no-recreate', default=True)
 @click.option('--debug/--no-debug', default=False)
 def cli_generate_report(config_file, index, recreate, debug):
     """
