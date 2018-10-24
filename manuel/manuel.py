@@ -1,8 +1,10 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
 import psycopg2
 from psycopg2.extensions import AsIs
+import psycopg2.extensions
+
 from psycopg2.extras import DictCursor
 from configobj import ConfigObj
 
@@ -19,9 +21,10 @@ class Manuel(object):
         """
         Class constructor
         """
-
+        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
         self.config = ConfigObj(url_config)
         self.conn = psycopg2.connect(**self.config['report']['connection'])
+        self.conn.set_client_encoding('UTF8')
         maped = self.check_maping()
         self.db = db
         if self.db.provider is None:
@@ -143,17 +146,15 @@ class Manuel(object):
             if debug:
                 print("Generating {}".format(template))
             url_template = os.path.join(base_dir, template)
-            f = open(url_template)
-            base, extension = os.path.splitext(url_template)
-            temp = f.read()
+            with open(url_template) as f:
+                base, extension = os.path.splitext(url_template)
+                temp = f.read()
             f.close()
             t = Template(temp)
-
             report_data = t.render(data=result)
             url_out = os.path.join(base_dir, 'report'+str(extension))
-            f = open(url_out, 'w')
-            f.write(report_data)
-            f.close()
+            with open(url_out, 'w') as f:
+                f.write(report_data.encode('utf8'))
 
         print ('\nDone\n')
         return result
@@ -166,7 +167,7 @@ class Manuel(object):
         :param result:
         :return:
         """
-        report_name = self.config["general"].get("report_name", config_url)
+        report_name = self.config["report"]["general"].get("report_name", config_url)
         gen_date = str(datetime.now().date())
         for subarea_name, data in result.items():
             Historic(
