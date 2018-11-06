@@ -5,7 +5,7 @@ requirements = data.split()
 
 setup(
     name='manuel',
-    version='0.1.4',
+    version='0.1.5',
     packages=find_packages(),
     url='https://github.com/Xevib/manuel',
     license='MIT',
