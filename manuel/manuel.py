@@ -36,8 +36,7 @@ class Manuel(object):
                 user=conn_config["user"],
                 password=conn_config["password"]
             )
-        if not maped:
-            db.generate_mapping(create_tables=True)
+        db.generate_mapping(create_tables=maped)
 
     def check_maping(self):
         """
