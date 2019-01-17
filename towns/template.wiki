@@ -11,13 +11,13 @@
 !Resta
 |-{% for poble,line in data.items() %}
 | {{poble}}
-| align="right" | {{'%.0f' | format(line.len_noname_residential)}}
-| align="right" | {{'%.0f' | format(line.count_noname_residential)}}
-| align="right" | {{'%.0f' | format(line.len_noname_livingstreet)}}
-| align="right" | {{'%.0f' | format(line.count_noname_livingstreet)}}
-| align="right" | {{'%.0f' | format(line.len_noname_residential + line.len_noname_livingstreet)}}
-| align="right" | {{'%.0f' | format(line.len_residential_total + line.len_livingstreet_total)}}
-| align="right" | {{'%.1f%%' | format(line.len_residential_total + line.len_livingstreet_total and ((line.len_noname_residential + line.len_noname_livingstreet)/(line.len_residential_total + line.len_livingstreet_total))*100)}}
+| align="right" | {{'%.0f' | format(line.len_noname_residential|default(0))}}
+| align="right" | {{'%.0f' | format(line.count_noname_residential|default(0))}}
+| align="right" | {{'%.0f' | format(line.len_noname_livingstreet|default(0))}}
+| align="right" | {{'%.0f' | format(line.count_noname_livingstreet|default(0))}}
+| align="right" | {{'%.0f' | format(line.len_noname_residential|default(0) + line.len_noname_livingstreet|default(0))}}
+| align="right" | {{'%.0f' | format(line.len_residential_total|default(0) + line.len_livingstreet_total|default(0))}}
+| align="right" | {{'%.1f%%' | format(line.len_residential_total|default(0) + line.len_livingstreet_total|default(0) and ((line.len_noname_residential|default(0) + line.len_noname_livingstreet|default(0))/(line.len_residential_total|default(0) + line.len_livingstreet_total|default(0)))*100)}}
 |-{% endfor %}
 |}
 
