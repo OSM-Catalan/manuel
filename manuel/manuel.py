@@ -121,6 +121,14 @@ class Manuel(object):
 
         cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         result = {}
+        table_name = "manuel_{}".format(self.config["report"]["general"]["table_name"])
+        sql = """
+        SELECT distinct(subarea_name) from %(table_name)s
+        """
+        cur.execute(sql, {"table_name":AsIs(table_name)})
+        ret = cur.fetchall()
+        for r in ret:
+            result[r[0]] = {}
 
         for element in tqdm(self.config['report']['elements'].keys()):
             sql = self.config['report']['elements'][element]['sql']
