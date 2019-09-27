@@ -13,7 +13,8 @@ def manuel():
 @click.option('--index/--no-index', default=False)
 @click.option('--recreate/--no-recreate', default=True)
 @click.option('--debug/--no-debug', default=False)
-def cli_generate_report(config_file, index, recreate, debug):
+@click.option('--name')
+def cli_generate_report(config_file, index, recreate, debug, name):
     """
     CLI entry point
 
@@ -30,7 +31,11 @@ def cli_generate_report(config_file, index, recreate, debug):
         m.create_index(config_file, debug)
     if recreate:
         m.generate_materialized_vies(config_file, debug)
-    result = m.generate_report(config_file, debug)
+    if not name:
+        from os.path import basename, splitext
+        name = m.config["report"]["general"].get("report_name", None) or \
+            splitext(basename(config_file))[0] or 'report'
+    result = m.generate_report(config_file, debug, name)
     m.save_results(result, config_file)
 
 
