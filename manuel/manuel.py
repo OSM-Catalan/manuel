@@ -105,7 +105,7 @@ class Manuel(object):
         cur.execute(sql_create, self.config['report']['general'])
         self.conn.commit()
 
-    def generate_report(self, url_config, debug=False):
+    def generate_report(self, url_config, debug=False, report_name="report"):
         """
         Method to generate the report
 
@@ -159,7 +159,7 @@ class Manuel(object):
             f.close()
             t = Template(temp)
             report_data = t.render(data=result)
-            url_out = os.path.join(base_dir, 'report'+str(extension))
+            url_out = os.path.join(base_dir, report_name+str(extension))
             with open(url_out, 'w') as f:
                 f.write(report_data.encode('utf8'))
 
